@@ -7,6 +7,9 @@ Created on 1 Mar 2017
 import argparse
 import numpy
 from et_xmlfile.tests.common_imports import read_file
+import re 
+from builtins import len 
+from argcomplete.compat import str
 
 def main():
     parser = argparse.ArgumentParser()
@@ -15,23 +18,41 @@ def main():
     
     filename = args.input
     
-    buffer = read_file(filename=filename)
+    buffer = read_file(filename)
     
     lines = buffer.split('\n')
+    
+    r = re.compile("([0-9]+)")
+    
+    lights = set()
 
-    size = int(lines[0])
-    
-    tester = LEDTester(size)
-    
-    for i, line in enumerate(lines[1:]):
-        tester.execute_command(line)
+    for line in (lines):
+        x1, y1, x2, y2 = [int(x) for x in r.findall(line)]
+        if line.startswith('toggle'):
+            for x in range(x1, x2+1):
+                for y in range(y1, y2+1):
+                    if(x,y) in lights:
+                        lights.remove((x,y))
+                    else:
+                        lights.add((x,y))
+                        
+        elif line.startswith('turn off'):
+            for x in range(x1, x2 + 1):
+                for y in range(y1, y2 + 1):
+                    if (x,y) in lights:
+                        lights.remove((x,y))
+                        
+        elif line.startswith('turn on'):
+            for x in range(x1, x2 + 1):
+                for y in range(y1, y2 + 1):
+                    lights.add((x,y))  
+                        
         
-    print("{} {}".format(filename, tester.count_lighting()))
-    return
+        
+        
+    print (len(lights))
 
-class LEDTester:
-    
-    
+
     
 if __name__ == '__main__':
     main()
