@@ -17,6 +17,9 @@ setup(name="ledtester",
         'console_scripts':['led_tester=docs.main:main']
         },
       install_requires=[
-          'numpy',
+          'argparse',
+          're',
+          'len',
+          'urllib.request',
       ],
       )
