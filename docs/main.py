@@ -10,6 +10,7 @@ from et_xmlfile.tests.common_imports import read_file
 import re 
 from builtins import len 
 from argcomplete.compat import str
+import urllib.request
 
 
 def main():
@@ -17,11 +18,16 @@ def main():
     parser.add_argument('-u','--ur',action='store',dest='url',default=None,help='<Required> url link',required=True)
     args = parser.parse_args()
     print(args)
-    argmts = args.url 
     
+    argmts = args.url 
     print(argmts)
+    
+    req = urllib.request.urlopen(argmts)
 
-    lines = argmts.split('\n')
+    buffer = req.read().decode('utf-8')
+    print(buffer)
+
+    
     
 
 
